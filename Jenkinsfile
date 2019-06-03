@@ -36,7 +36,7 @@ pipeline {
         label "${(env.jenkinsAgent == null || env.jenkinsAgent == 'null') ? "master" : env.jenkinsAgent}"
     }
     options {
-        timeout(time: 8, unit: 'HOURS') 
+        timeout(time: 8, unit: 'HOURS')
         buildDiscarder(logRotator(numToKeepStr:'10'))
     }
     stages {
@@ -55,7 +55,7 @@ pipeline {
                         serverSql = serverSql.isEmpty() ? "localhost" : serverSql
                         server1cPort = server1cPort.isEmpty() ? "1540" : server1cPort
                         agent1cPort = agent1cPort.isEmpty() ? "1541" : agent1cPort
-                        env.sqlUser = sqlUser.isEmpty() ? "sa" : sqlUser
+                        env.sqlUser = sqlUser.isEmpty() ? "postgres" : sqlUser
                         testbase = null
 
                         // создаем пустые каталоги
@@ -80,27 +80,27 @@ pipeline {
 
                             // 1. Удаляем тестовую базу из кластера (если он там была) и очищаем клиентский кеш 1с
                             dropDbTasks["dropDbTask_${testbase}"] = dropDbTask(
-                                server1c, 
-                                server1cPort, 
-                                serverSql, 
-                                testbase, 
-                                admin1cUser, 
+                                server1c,
+                                server1cPort,
+                                serverSql,
+                                testbase,
+                                admin1cUser,
                                 admin1cPwd,
                                 sqluser,
                                 sqlPwd
                             )
                             // 2. Делаем sql бекап эталонной базы, которую будем загружать в тестовую базу
                             backupTasks["backupTask_${templateDb}"] = backupTask(
-                                serverSql, 
-                                templateDb, 
+                                serverSql,
+                                templateDb,
                                 backupPath,
                                 sqlUser,
                                 sqlPwd
                             )
                             // 3. Загружаем sql бекап эталонной базы в тестовую
                             restoreTasks["restoreTask_${testbase}"] = restoreTask(
-                                serverSql, 
-                                testbase, 
+                                serverSql,
+                                testbase,
                                 backupPath,
                                 sqlUser,
                                 sqlPwd
@@ -115,18 +115,18 @@ pipeline {
                             // 5. Обновляем тестовую базу из хранилища 1С (если применимо)
                             updateDbTasks["updateTask_${testbase}"] = updateDbTask(
                                 platform1c,
-                                testbase, 
-                                storage1cPath, 
-                                storageUser, 
-                                storagePwd, 
-                                testbaseConnString, 
-                                admin1cUser, 
+                                testbase,
+                                storage1cPath,
+                                storageUser,
+                                storagePwd,
+                                testbaseConnString,
+                                admin1cUser,
                                 admin1cPwd
                             )
                             // 6. Запускаем внешнюю обработку 1С, которая очищает базу от всплывающего окна с тем, что база перемещена при старте 1С
                             runHandlers1cTasks["runHandlers1cTask_${testbase}"] = runHandlers1cTask(
-                                testbase, 
-                                admin1cUser, 
+                                testbase,
+                                admin1cUser,
                                 admin1cPwd,
                                 testbaseConnString
                             )
@@ -175,7 +175,7 @@ pipeline {
                 }
             }
         }
-    }   
+    }
     post {
         always {
             script {
