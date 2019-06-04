@@ -41,10 +41,10 @@ if "%fulldrop%" == "" (
     set fulldropLine = -fulldrop true
 )
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Unrestricted -file drop_db.ps1 -server1c %server1c% -agentPort %agentPort% -serverSql %serverSql% -infobase %base% %admin1cUserLine% %admin1cPwdLine% %sqluserLine% %sqlpasswLine% %fulldropLine%
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Unrestricted -File drop_db.ps1 -server1c %server1c% -agentPort %agentPort% -serverSql %serverSql% -infobase %base% %admin1cUserLine% %admin1cPwdLine% %sqluserLine% %sqlpasswLine% %fulldropLine%
 if NOT %ERRORLEVEL% == 0 (
     echo "Script failed  when executing 64-bit powershell drop_db script. Let's try 32-bit..."
-    "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Unrestricted -file drop_db.ps1 -server1c %server1c% -agentPort %agentPort% -serverSql %serverSql% -infobase %base% %admin1cUserLine% %admin1cPwdLine% %sqluserLine% %sqlpasswLine% %fulldropLine%
+    "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Unrestricted -File drop_db.ps1 -server1c %server1c% -agentPort %agentPort% -serverSql %serverSql% -infobase %base% %admin1cUserLine% %admin1cPwdLine% %sqluserLine% %sqlpasswLine% %fulldropLine%
 )
 
 rem 32-bit PowerShell 	C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
