@@ -5,7 +5,7 @@ package io.libs
 // Параметры:
 //  platform - номер платформы 1С, например 8.3.12.1529
 //  server1c - сервер 1c
-//  serversql - сервер 1c 
+//  serversql - сервер 1c
 //  base - имя базы на сервере 1c и sql
 //  cfdt - файловый путь к dt или cf конфигурации для загрузки. Только для пакетного режима!
 //  isras - если true, то используется RAS для скрипта, в противном случае - пакетный режим
@@ -64,7 +64,7 @@ def getConnString(server1c, infobase, agent1cPort) {
 // Удаляет базу из кластера через powershell.
 //
 // Параметры:
-//  server1c - сервер 1с 
+//  server1c - сервер 1с
 //  agentPort - порт агента кластера 1с
 //  serverSql - сервер sql
 //  base - база для удаления из кластера
@@ -77,7 +77,7 @@ def getConnString(server1c, infobase, agent1cPort) {
 def dropDb(server1c, agentPort, serverSql, base, admin1cUser, admin1cPwd, sqluser, sqlPwd, fulldrop = false) {
 
     utils = new Utils()
-    
+
     fulldropLine = "";
     if (fulldrop) {
         fulldropLine = "-fulldrop true"
@@ -103,8 +103,8 @@ def dropDb(server1c, agentPort, serverSql, base, admin1cUser, admin1cPwd, sqluse
         sqlpasswLine = "-sqlPwd ${sqlPwd}"
     }
 
-    returnCode = utils.cmd("powershell -file ${env.WORKSPACE}/copy_etalon/drop_db.ps1 -server1c ${server1c} -agentPort ${agentPort} -serverSql ${serverSql} -infobase ${base} ${admin1cUserLine} ${admin1cPwdLine} ${sqluserLine} ${sqlpasswLine} ${fulldropLine}")
-    if (returnCode != 0) { 
+    returnCode = utils.cmd("powershell -file ${env.WORKSPACE}/copy_etalon/drop_db.ps1 -server1c ${server1c} -agentPort ${agentPort} -serverSql ${serverSql} -infobase ${base} ${admin1cUserLine} ${admin1cPwdLine} ${sqluserLine} ${sqlpasswLine} ${fulldropLine} -ExecutionPolicy Unrestricted")
+    if (returnCode != 0) {
         error "error when deleting base with COM ${server1c}\\${base}. See logs above fore more information."
     }
 }
