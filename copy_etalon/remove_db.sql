@@ -1,14 +1,8 @@
-USE master
-GO
+mydb := $1;
+func_cmd := 'DROP DATABASE IF EXISTS ' + my;
 
-DECLARE @mydb nvarchar(50);
--- Ввести имя базы данных
-set @mydb = '$(infobase)';
+PRINT 'Removing ' + mydb + ' from database...'
 
-PRINT 'Removing ' + @mydb + ' from database...'
+PERFORM func_cmd
 
-EXEC('ALTER DATABASE ' + @mydb + ' SET SINGLE_USER WITH ROLLBACK IMMEDIATE')
-
-EXEC ('DROP DATABASE ' + @mydb)
-
-PRINT @mydb + ' removed sucessfully'
+PRINT mydb + ' removed sucessfully'
