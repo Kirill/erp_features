@@ -11,14 +11,14 @@ package io.libs;
 def checkDb(dbServer, infobase, sqlUser, sqlPwd) {
     utils = new Utils()
 
-    sqlUserpath = "" 
+    sqlUserpath = ""
     if (sqlUser != null && !sqlUser.isEmpty()) {
         sqlUserpath = "-U ${sqlUser}"
     } else {
         sqlUserpath = "-E"
     }
 
-    sqlPwdPath = "" 
+    sqlPwdPath = ""
     if (sqlPwd != null && !sqlPwd.isEmpty()) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
@@ -41,19 +41,19 @@ def checkDb(dbServer, infobase, sqlUser, sqlPwd) {
 def backupDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     utils = new Utils()
 
-    sqlUserpath = "" 
+    sqlUserpath = ""
     if (sqlUser != null && !sqlUser.isEmpty()) {
         sqlUserpath = "-U ${sqlUser}"
     } else {
-        sqlUserpath = "-E"
+        sqlUserpath = ""
     }
 
-    sqlPwdPath = "" 
+    sqlPwdPath = ""
     if (sqlPwd != null && !sqlPwd.isEmpty()) {
-        sqlPwdPath = "-P ${sqlPwd}"
+        sqlPwdPath = "${sqlPwd}"
     }
 
-    returnCode = utils.cmd("sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/backup.sql\" -b -v backupdb =${infobase} -v bakfile=\"${backupPath}\"")
+    returnCode = utils.cmd("psql -h ${dbServer} ${sqlUserpath} ${sqlPwdPath} -f \"${env.WORKSPACE}/copy_etalon/backup.sql\" -v backupdb =${infobase} -v bakfile=\"${backupPath}\"")
     if (returnCode != 0) {
         utils.raiseError("Возникла ошибки при создании бекапа sql базы ${dbServer}\\${infobase}. Для подробностей смотрите логи")
     }
@@ -69,14 +69,14 @@ def backupDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
 //
 def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
 
-    sqlUserpath = "" 
+    sqlUserpath = ""
     if (sqlUser != null && !sqlUser.isEmpty()) {
         sqlUserpath = "-U ${sqlUser}"
     } else {
         sqlUserpath = "-E"
     }
 
-    sqlPwdPath = "" 
+    sqlPwdPath = ""
     if (sqlPwd != null && !sqlPwd.isEmpty()) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
@@ -101,14 +101,14 @@ def createEmptyDb(dbServer, infobase, sqlUser, sqlPwd) {
 def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     utils = new Utils()
 
-    sqlUserpath = "" 
+    sqlUserpath = ""
     if (sqlUser != null && !sqlUser.isEmpty()) {
         sqlUserpath = "-U ${sqlUser}"
     } else {
         sqlUserpath = "-E"
     }
 
-    sqlPwdPath = "" 
+    sqlPwdPath = ""
     if (sqlPwd != null && !sqlPwd.isEmpty()) {
         sqlPwdPath = "-P ${sqlPwd}"
     }
@@ -116,7 +116,7 @@ def restoreDb(dbServer, infobase, backupPath, sqlUser, sqlPwd) {
     returnCode = utils.cmd("sqlcmd -S ${dbServer} ${sqlUserpath} ${sqlPwdPath} -i \"${env.WORKSPACE}/copy_etalon/restore.sql\" -b -v restoreddb =${infobase} -v bakfile=\"${backupPath}\"")
     if (returnCode != 0) {
          utils.raiseError("Возникла ошибка при восстановлении базы из sql бекапа ${dbServer}\\${infobase}. Для подробностей смотрите логи")
-    } 
+    }
 }
 
 
@@ -132,5 +132,5 @@ def clearBackups(backup_path) {
     returnCode = utils.cmd("oscript ${env.WORKSPACE}/one_script_tools/deleteFile.os -file\"${backup_path}\"")
     if (returnCode != 0) {
         echo "Error when deleting file: ${backup_path}"
-    }    
+    }
 }

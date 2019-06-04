@@ -90,12 +90,12 @@ if ($baseFound -eq $true) {
         if ($sqluser.Length -gt 0) {
             $sqluserline = "-U $sqluser"
         } else {
-            $sqluserline = "-E"
+            $sqluserline = ""
         }
 
         $sqlpwdline = ""
         if ($sqlPwd.Length -gt 0) {
-            $sqlpwdline = "-P $sqlPwd"
+            $sqlpwdline = "$sqlPwd"
         }
 
         
@@ -107,7 +107,7 @@ if ($baseFound -eq $true) {
         # cmd.exe /c $cmd_text 
 
         if ($fulldrop -eq $true) {
-            $cmd_text = "psql -h $serverSql -U $sqluserline $sqlpwdline -f $dir\remove_db.sql -v infobase =$infobase"
+            $cmd_text = "psql -h $serverSql $sqluserline $sqlpwdline -f $dir\remove_db.sql -v infobase =$infobase"
             cmd.exe /c $cmd_text 
         }
 
